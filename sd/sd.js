@@ -32,8 +32,8 @@ SD.prototype.setup = function(){
 
     SDCONFIG.drawOptions = new DrawOptions();
     SDCONFIG.drawOptions.debug = false;
-    SDCONFIG.drawOptions.triggerzones = true;
-    SDCONFIG.drawOptions.triggerzonesAlwaysOn = true;
+    SDCONFIG.drawOptions.triggerzones = false;
+    SDCONFIG.drawOptions.triggerzonesAlwaysOn = false;
     SDCONFIG.drawOptions.cooldowns = true;
 
     this.canvas = createCanvas(SDCONFIG.canvasWidth, SDCONFIG.canvasHeight);

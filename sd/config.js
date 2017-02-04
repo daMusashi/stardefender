@@ -33,7 +33,12 @@ function CONFIG(){
 
     this.coolDownIntervalStep = 100;  // millisekunder - interval för rapportering om cooldown-status tillUI
 
-    this.playerHaloColor = [66, 134, 244, 100];
+    this.playerCursorSize = 8;
+    this.playerCursorColor = [242, 124, 21];
+    this.playerCursorLineAlfa = 0.5;
+    this.playerCursorLineDotSpacing = 5; // inklusive punkten (space = x -1)
+
+    this.playerHaloColor = [66, 134, 244, 0.3];
     this.playerHaloSize = this.starSize * 2.5;
     this.playerHaloStrokeSize = 1;
 
