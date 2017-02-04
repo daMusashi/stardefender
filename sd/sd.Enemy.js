@@ -16,7 +16,10 @@ function Enemy(x, y, speed, star) {
 
     this.status = "normal"; // normal: mot star, dying: die-anim, fool: mot proxy-bomb, impact: star-krock-anim, dead: väntar på att tas bort av swarm
 
-    this.targeted = false; // om under beskjutning
+    this.isTargeted = false; // om under beskjutning sätts av laser
+    this.inTriggerzone = false; // om i en lasers triggerzone, används för debug
+
+    this.distanceToStar = 2000; // sätts/uppdaertas av update och används för sortering av enemy-listan i swarm (närmast star först)
 
     // anims
     this.enemiesImpactIndex = 0;
@@ -51,6 +54,8 @@ Enemy.prototype.update = function(){
             this.status = "impact";
             this.impactHandler.handlerCall(this);
         }
+
+        this.distanceToStar = Vector.distance(this.pos, this.star.pos) - this.star.size/2;
     }
 };
 
@@ -91,6 +96,14 @@ Enemy.prototype.draw = function(drawOptions){
 
             noStroke();
             fill(255);
+            if(drawOptions.debug) {
+                if(this.isTargeted) {
+                    fill(255, 0, 0);
+                }
+                if(this.inTriggerzone) {
+                    fill(109, 255, 5);
+                }
+            }
             ellipse(this.pos.x, this.pos.y, this.size, this.size);
 
     }

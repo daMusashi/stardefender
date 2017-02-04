@@ -1,0 +1,11 @@
+2017-02-03
+* Se till att pause blir global för t.ex även Cooldown (har lagt in en pause()), nu är det bara huvud-draw() som påverkas.
+  Knyta allt tidsbaserat (speed, cooldowns etc.) till framerate??? (och Cooldown räknar via en update() ) Då funkar nuvrande lösning med styra från huvud-draw()
+
+* GÖr om cooldown till:
+** Energi - cooldown-pie visar eneri
+** Turrets laser dränerar turret på energi som måste laddas om
+** Men coldown-pis visar istället en energi som drämeras från star för att ladda turrets
+** Star har en cooldown-pis undersig som sticker ut som visar laddningen
+** Laddningen fylls på lite hela tiden
+** varje turret har en "laddningslinje", när dess energi är slut åker en enrgi-bit ut från sar längs linjen till turret

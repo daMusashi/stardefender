@@ -21,8 +21,20 @@ function draw() {
 
 }
 
+function mouseClicked() {
+
+    game.mouseClicked();
+
+}
+
 function keyPressed() {
 
     game.keyPressed();
+
+}
+
+function keyReleased() {
+
+    game.keyReleased();
 
 }

@@ -1,4 +1,5 @@
 function DrawOptions(){
     this.debug = false;
-    this.hotzones = false;
+    this.triggerzones = false;
+    this.cooldowns = false;
 }

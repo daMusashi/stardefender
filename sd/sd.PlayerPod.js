@@ -1,4 +1,4 @@
-function Pod(spawnAngle, star, player){
+function PlayerPod(spawnAngle, star, player){
     this.star = star;
     this.player = player;
 
@@ -11,9 +11,10 @@ function Pod(spawnAngle, star, player){
 
     this.angleVelocity = SDCONFIG.playerPodAngleVel;
     this.direction = 0; // 0 = stilla, 1 = cw, -1 = ccw
+    this.angle = 0;
 }
 
-Pod.prototype.update = function(){
+PlayerPod.prototype.update = function(){
     this.direction = 0; // resetar
 
     // Skapar kloner av nuvarande halo-pos (relativt pos mot star) och förändrar vinkelhastigheten för att motsvara::
@@ -47,16 +48,18 @@ Pod.prototype.update = function(){
         }
         this.pos = new Vector(this.star.pos.x + this.haloPos.x, this.star.pos.y + this.haloPos.y);
     }
+
+    this.angle = Vector.angleBetween(this.pos, this.star.pos) + Math.PI/2; // vinkel till star + 90 grader
 };
 
-Pod.prototype.draw = function(drawOptions){
-    var angle = Vector.angleBetween(this.pos, this.star.pos) + Math.PI/2; // vinkel till star + 90 grader
+PlayerPod.prototype.draw = function(drawOptions){
+
     var w = SDCONFIG.playerPodBodySize[0];
     var h = SDCONFIG.playerPodBodySize[1];
 
     push();
     translate(this.pos.x, this.pos.y);
-    rotate(angle);
+    rotate(this.angle);
     // pod
     noStroke();
     fill(SDCONFIG.playerPodColor[0], SDCONFIG.playerPodColor[1], SDCONFIG.playerPodColor[2]);

@@ -31,8 +31,10 @@ SD.prototype.setup = function(){
     angleMode(RADIANS);
 
     SDCONFIG.drawOptions = new DrawOptions();
-    SDCONFIG.drawOptions.debug = true;
-    SDCONFIG.drawOptions.hotzones = true;
+    SDCONFIG.drawOptions.debug = false;
+    SDCONFIG.drawOptions.triggerzones = true;
+    SDCONFIG.drawOptions.triggerzonesAlwaysOn = true;
+    SDCONFIG.drawOptions.cooldowns = true;
 
     this.canvas = createCanvas(SDCONFIG.canvasWidth, SDCONFIG.canvasHeight);
 
@@ -41,6 +43,7 @@ SD.prototype.setup = function(){
     this.player = new Player(this.star);
     this.swarm = {};
 
+    this.turrets = new TurretCollection();
 
     this.nextSwarm();
 
@@ -56,16 +59,20 @@ SD.prototype.starDiedHandler = function(){
 }
 
 SD.prototype.nextSwarm = function(){
-    this.swarm = new Swarm(this.star, this.player, 0, 90, 50, SDCONFIG.enemiesStartVel);
+    this.swarm = new Swarm(this.star, this.player, this.turrets, 0, 360, 200, SDCONFIG.enemiesStartVel);
     this.swarm.allDeadHandlers.add(this.nextSwarm, this);
     this.swarm.impactHandlers.add(this.EnemyImpactHandler, this);
 };
+
+SD.prototype.mouseClicked = function(){
+    this.turrets.add(mouseX, mouseY);
+}
 
 // för enstaka tryckningar - använd i p5's keyPressed
 SD.prototype.keyPressed = function(){
     console.log("key pressed ("+keyCode+")");
     // pause
-    if(keyCode == 80){ // p
+    if(keyCode == SDCONFIG.keyPause){ // p
         console.log(this.mode);
         if(this.mode == 2) {
             this.mode = 0;
@@ -75,20 +82,45 @@ SD.prototype.keyPressed = function(){
             }
         }
     }
-    // hotzones
-    if(keyCode == 72){ // h
-        if(SDCONFIG.drawOptions.hotzones){
-            SDCONFIG.drawOptions.hotzones = false;
+    // show triggerzones (always on) toggle
+    if(keyCode == SDCONFIG.keyShowTriggerzonesToggle){ // t
+        if(SDCONFIG.drawOptions.triggerzones){
+            SDCONFIG.drawOptions.triggerzones = false;
+            SDCONFIG.drawOptions.triggerzonesAlwaysOn = false;
         } else {
-            SDCONFIG.drawOptions.hotzones = true;
+            SDCONFIG.drawOptions.triggerzones = true;
+            SDCONFIG.drawOptions.triggerzonesAlwaysOn = true;
         }
     }
-    // debug
-    if(keyCode == 68){ // d
+    // show triggerzones när mellanslag nedtryckt
+    if(keyCode == SDCONFIG.keyShowTriggerzones){ // mellanslag
+        if(SDCONFIG.drawOptions.triggerzonesAlwaysOn == false && SDCONFIG.drawOptions.triggerzones == false){
+            SDCONFIG.drawOptions.triggerzones = true;
+        }
+    }
+    // show debug toggle
+    if(keyCode == SDCONFIG.keyShowDebugToggle){ // d
         if(SDCONFIG.drawOptions.debug){
             SDCONFIG.drawOptions.debug = false;
         } else {
             SDCONFIG.drawOptions.debug = true;
+        }
+    }
+
+    // show cooldowns toggle
+    if(keyCode == SDCONFIG.keyShowCooldowns){ // c
+        if(SDCONFIG.drawOptions.cooldowns){
+            SDCONFIG.drawOptions.cooldowns = false;
+        } else {
+            SDCONFIG.drawOptions.cooldowns = true;
+        }
+    }
+}
+
+SD.prototype.keyReleased = function(){
+    if(keyCode == SDCONFIG.keyShowTriggerzones){ // mellanslag
+        if(SDCONFIG.drawOptions.triggerzonesAlwaysOn == false && SDCONFIG.drawOptions.triggerzones == true){
+            SDCONFIG.drawOptions.triggerzones = false;
         }
     }
 }
@@ -99,6 +131,7 @@ SD.prototype.update = function(){
         this.star.update();
         this.swarm.update();
         this.player.update(this.swarm);
+        this.turrets.update();
     }
 
 };
@@ -133,7 +166,7 @@ SD.prototype.drawRunning = function(){
     this.star.draw(SDCONFIG.drawOptions);
     this.swarm.draw(SDCONFIG.drawOptions);
     this.player.draw(SDCONFIG.drawOptions);
-
+    this.turrets.draw(SDCONFIG.drawOptions);
 };
 
 var sdinfo = function(msg){

@@ -1,4 +1,4 @@
-function Swarm(star, player, startAngleDeg, endAngleDeg, enemyCount, enemyVelocity){
+function Swarm(star, player, turrets, startAngleDeg, endAngleDeg, enemyCount, enemyVelocity){
     var startAng = radians(startAngleDeg);
     var angLength = radians(endAngleDeg) - startAng;
 
@@ -7,6 +7,7 @@ function Swarm(star, player, startAngleDeg, endAngleDeg, enemyCount, enemyVeloci
     this.enemiesRemoveQueue = [];
     this.star = star;
     this.player = player;
+    this.turrets = turrets;
 
     this.allDeadHandlers = new HandlerStack();
     this.impactHandlers = new HandlerStack(); // returnerar damage när enemies träffas star och ger damage (+ ev andra händelser då enemy krockar med damage)
@@ -35,33 +36,6 @@ function Swarm(star, player, startAngleDeg, endAngleDeg, enemyCount, enemyVeloci
     }
 }
 
-Swarm.prototype.enemyImpactHandler = function(enemy){
-    this.impactHandlers.handlerCall(enemy.damage);
-};
-
-Swarm.prototype.isTargeted = function(enemy){
-    // kollar så redan inte under beskjuting
-    for(var i = 0; i < this.targetedEnemies.length; i++) {
-        if (this.targetedEnemies[i] === enemy) {
-            return true;
-        }
-        break;
-    }
-    return false;
-}
-
-Swarm.prototype.markAsTargeted = function(enemy){
-    this.targetedEnemies.push(enemy);
-}
-
-Swarm.prototype.hitTest = function(){
-
-}
-
-Swarm.prototype.removeEnemyHandler = function(enemy){
-    this.enemiesRemoveQueue.push(enemy);
-};
-
 Swarm.prototype.removeEnemy = function(enemy){
     for(var i = 0; i < this.targetedEnemies.length; i++) {
         if (this.targetedEnemies[i] === enemy) {
@@ -81,6 +55,21 @@ Swarm.prototype.removeEnemy = function(enemy){
     }
 };
 
+
+// handlers
+
+Swarm.prototype.enemyImpactHandler = function(enemy){
+    this.impactHandlers.handlerCall(enemy.damage);
+};
+
+
+Swarm.prototype.removeEnemyHandler = function(enemy){
+    this.enemiesRemoveQueue.push(enemy);
+};
+
+
+// update & draw
+
 Swarm.prototype.update = function(){
     // removes enemies
     for(var i = 0; i < this.enemiesRemoveQueue.length; i++) {
@@ -88,6 +77,18 @@ Swarm.prototype.update = function(){
     }
     this.enemiesRemoveQueue = [];
 
+    //sorterar this.enemies efter avstånd till star, närmast först
+    // // sorteringsfunktion för array.sort som sorterar efter enemy.distanceToStar, lägst först
+    function shortestDistance(a, b){
+        if (a.distanceToStar < b.distanceToStar)
+            return -1;
+        if (a.distanceToStar > b.distanceToStar)
+            return 1;
+        return 0;
+    }
+    this.enemies.sort(shortestDistance);
+
+    // huvudloop för enemy-logik, mest koll om i triggerzones
     for(var i = 0; i < this.enemies.length; i++) {
         var enemy = this.enemies[i];
         enemy.update();
@@ -95,19 +96,35 @@ Swarm.prototype.update = function(){
         // krocktestar allt i den här loopen för optimering
 
         // "krock" med player (aktiverar laser)
-        if(!enemy.targeted){
-            if(Vector.distance(this.player.pod.pos, enemy.pos) < this.player.turret.triggerRange){
-                console.log("KROCK");
-                enemy.targeted = true;
-                this.player.shoot(enemy);
+        if(!enemy.targeted) {
+
+            // if:ar bort enemys för nära star -är ingen idé att börja skjuta på, de hinner göra impact innan die TODO hitta på någon algoritm, nu fast pixel)
+            if(enemy.distanceToStar > 20){
+                // kollar om inom player trigger-zone
+                if (Vector.distance(this.player.pod.pos, enemy.pos) < this.player.turret.triggerRange) {
+                    //console.log("in triggerzone - to star [" + enemy.distanceToStar + "]");
+                    enemy.inTriggerzone = true;
+                    this.player.shoot(enemy);
+                } else {
+                    enemy.inTriggerzone = false;
+                }
+
+                // kollar om inom en turret trigger-zone
+                var turret = null;
+                if(turret = this.turrets.inTriggerZone(enemy)){
+                    enemy.inTriggerzone = true;
+                    this.turrets.shoot(turret, enemy);
+                } else {
+                    enemy.inTriggerzone = false;
+                }
             }
         }
 
     }
 };
 
-Swarm.prototype.draw = function(){
+Swarm.prototype.draw = function(drawOptions){
     for(var i = 0; i < this.enemies.length; i++) {
-        this.enemies[i].draw(SDCONFIG.drawOptions);
+        this.enemies[i].draw(drawOptions);
     }
 };

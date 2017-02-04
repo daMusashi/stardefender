@@ -3,8 +3,8 @@ function Player(star){
 
     this.size = SDCONFIG.playerHaloSize;
 
-    this.pod = new Pod(0, star, this);
-    this.turret = new Turret(this.pod);
+    this.pod = new PlayerPod(0, star, this);
+    this.turret = new PlayerTurret(this.pod);
 }
 
 Player.prototype.shoot = function(enemy){
@@ -12,7 +12,9 @@ Player.prototype.shoot = function(enemy){
 }
 
 Player.prototype.update = function(){
+
     this.pod.update();
+
     this.turret.update();
 };
 

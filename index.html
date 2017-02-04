@@ -8,6 +8,7 @@
     <script src="libs/Vector.js"></script>
     <script src="libs/Handler.js"></script>
     <script src="libs/HandlerStack.js"></script>
+    <script src="libs/Color.js"></script>
 
     <script src="sd/config.js"></script>
     <script src="sd/sd.js"></script>
@@ -16,15 +17,34 @@
     <script src="sd/sd.Enemy.js"></script>
     <script src="sd/sd.Swarm.js"></script>
     <script src="sd/sd.Player.js"></script>
-    <script src="sd/sd.Pod.js"></script>
-    <script src="sd/sd.Turret.js"></script>
+    <script src="sd/sd.PlayerPod.js"></script>
+    <script src="sd/sd.PlayerTurret.js"></script>
     <script src="sd/sd.DrawOptions.js"></script>
     <script src="sd/sd.Laser.js"></script>
     <script src="sd/sd.LaserCollection.js"></script>
+    <script src="sd/sd.Cooldown.js"></script>
+    <script src="sd/sd.StationaryTurret.js"></script>
+    <script src="sd/sd.TurretCollection.js"></script>
+
     <script src="sd/sd.ui.Text.js"></script>
+    <script src="sd/sd.ui.Cooldown.js"></script>
 
     <script src="app.js"></script>
+
+    <style>
+        canvas {
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .controls {
+            text-align: center;
+        }
+    </style>
 </head>
 <body id="game-body">
+<div class="controls">
+    <strong>d</strong>: debug toggle | <strong>t</strong>: triggerzone always show toggle | <strong>c</strong>: cooldowns toggle
+</div>
 </body>
 </html>
