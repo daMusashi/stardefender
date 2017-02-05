@@ -1,3 +1,7 @@
+PÅGÅENDE
+* lägg/andä till energi istället för cooldown
+* tid/hastigheter frames-baserad (coldown nu tidsbaserad)
+
 2017-02-03
 * Se till att pause blir global för t.ex även Cooldown (har lagt in en pause()), nu är det bara huvud-draw() som påverkas.
   Knyta allt tidsbaserat (speed, cooldowns etc.) till framerate??? (och Cooldown räknar via en update() ) Då funkar nuvrande lösning med styra från huvud-draw()

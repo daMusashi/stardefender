@@ -1,4 +1,4 @@
-function Swarm(star, player, turrets, startAngleDeg, endAngleDeg, enemyCount, enemyVelocity){
+function Swarm(star, player, turrets, bombs, startAngleDeg, endAngleDeg, enemyCount, enemyVelocity){
     var startAng = radians(startAngleDeg);
     var angLength = radians(endAngleDeg) - startAng;
 
@@ -8,6 +8,7 @@ function Swarm(star, player, turrets, startAngleDeg, endAngleDeg, enemyCount, en
     this.star = star;
     this.player = player;
     this.turrets = turrets;
+    this.magnets = bombs;
 
     this.allDeadHandlers = new HandlerStack();
     this.impactHandlers = new HandlerStack(); // returnerar damage när enemies träffas star och ger damage (+ ev andra händelser då enemy krockar med damage)
@@ -91,34 +92,38 @@ Swarm.prototype.update = function(){
     // huvudloop för enemy-logik, mest koll om i triggerzones
     for(var i = 0; i < this.enemies.length; i++) {
         var enemy = this.enemies[i];
-        enemy.update();
 
         // krocktestar allt i den här loopen för optimering
 
-        // "krock" med player (aktiverar laser)
-        if(!enemy.targeted) {
+        if(!enemy.isTargeted) {
 
-            // if:ar bort enemys för nära star -är ingen idé att börja skjuta på, de hinner göra impact innan die TODO hitta på någon algoritm, nu fast pixel)
-            if(enemy.distanceToStar > 20){
-                // kollar om inom player trigger-zone
-                if (Vector.distance(this.player.pod.pos, enemy.pos) < this.player.turret.triggerRange) {
-                    //console.log("in triggerzone - to star [" + enemy.distanceToStar + "]");
-                    enemy.inTriggerzone = true;
-                    this.player.shoot(enemy);
-                } else {
-                    enemy.inTriggerzone = false;
+            // if:ar bort enemys för nära star -är ingen idé att börja skjuta på
+            if(enemy.distanceToStar > SDCONFIG.stationaryTurretBurnLength){
+                if(this.player.turret.active && !this.player.turret.isShooting){
+                    // kollar om inom player trigger-zone
+                    if (Vector.distance(this.player.pod.pos, enemy.pos) < this.player.turret.triggerRange) {
+                        //console.log("in triggerzone - to star [" + enemy.distanceToStar + "]");
+                        enemy.inTriggerRange = true;
+                        this.player.turret.shoot(enemy);
+                    } else {
+                        enemy.inTriggerRange = false;
+                    }
                 }
 
                 // kollar om inom en turret trigger-zone
                 var turret = null;
-                if(turret = this.turrets.inTriggerZone(enemy)){
-                    enemy.inTriggerzone = true;
+                if(turret = this.turrets.inTriggerRange(enemy)){ // .active & .isShooting kollas i inTriggerRange() false (ingen turret) om de är false resp true
+                    enemy.inTriggerRange = true;
                     this.turrets.shoot(turret, enemy);
                 } else {
-                    enemy.inTriggerzone = false;
+                    enemy.inTriggerRange = false;
                 }
             }
         }
+
+        this.magnets.influence(enemy);
+
+        enemy.update();
 
     }
 };

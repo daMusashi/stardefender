@@ -30,20 +30,30 @@ SD.prototype.setup = function(){
     sdinfo("Setup");
     angleMode(RADIANS);
 
+    // ta bort webbläsarens kontext-menu (högerklick, behöver den själv :)
+    document.oncontextmenu = function(event){
+        event.preventDefault();
+        return false;
+    }
+
     SDCONFIG.drawOptions = new DrawOptions();
     SDCONFIG.drawOptions.debug = false;
-    SDCONFIG.drawOptions.triggerzones = false;
-    SDCONFIG.drawOptions.triggerzonesAlwaysOn = false;
+    SDCONFIG.drawOptions.triggerzones = true;
+    SDCONFIG.drawOptions.triggerzonesAlwaysOn = true;
     SDCONFIG.drawOptions.cooldowns = true;
 
     this.canvas = createCanvas(SDCONFIG.canvasWidth, SDCONFIG.canvasHeight);
 
     this.star = new Star(SDCONFIG.canvasWidth/2, SDCONFIG.canvasHeight/2, SDCONFIG.starSize, SDCONFIG.starSize);
     this.star.diedHandler = new Handler(this.starDiedHandler, this);
-    this.player = new Player(this.star);
+
+    this.energy = new EnergySystem(this.star);
+
+    this.player = new Player(this.star, this.energy);
     this.swarm = {};
 
-    this.turrets = new TurretCollection();
+    this.turrets = new TurretCollection(this.energy);
+    this.magnets = new MagnetCollection(this.energy);
 
     this.nextSwarm();
 
@@ -59,13 +69,18 @@ SD.prototype.starDiedHandler = function(){
 }
 
 SD.prototype.nextSwarm = function(){
-    this.swarm = new Swarm(this.star, this.player, this.turrets, 0, 360, 200, SDCONFIG.enemiesStartVel);
+    this.swarm = new Swarm(this.star, this.player, this.turrets, this.magnets, 0, 90, 50, SDCONFIG.enemiesStartVel);
     this.swarm.allDeadHandlers.add(this.nextSwarm, this);
     this.swarm.impactHandlers.add(this.EnemyImpactHandler, this);
 };
 
-SD.prototype.mouseClicked = function(){
-    this.turrets.add(mouseX, mouseY);
+SD.prototype.mouseReleased = function(){
+    if (mouseButton == LEFT) {
+        this.turrets.addStationaryT1(mouseX, mouseY);
+    }
+    if (mouseButton == RIGHT) {
+        this.magnets.add(mouseX, mouseY);
+    }
 }
 
 // för enstaka tryckningar - använd i p5's keyPressed
@@ -129,6 +144,7 @@ SD.prototype.update = function(){
 
     if(this.mode == 2) {
         this.star.update();
+        this.energy.update();
         this.swarm.update();
         this.player.update(this.swarm);
         this.turrets.update();
@@ -165,8 +181,9 @@ SD.prototype.drawRunning = function(){
     background(0);
     this.star.draw(SDCONFIG.drawOptions);
     this.swarm.draw(SDCONFIG.drawOptions);
-    this.player.draw(SDCONFIG.drawOptions);
     this.turrets.draw(SDCONFIG.drawOptions);
+    this.magnets.draw(SDCONFIG.drawOptions);
+    this.player.draw(SDCONFIG.drawOptions);
 };
 
 var sdinfo = function(msg){

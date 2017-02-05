@@ -1,29 +1,36 @@
-function TurretCollection(){
+function TurretCollection(energySystem){
     this.turrets = [];
-    this.lasers = new LaserCollection(new Color(SDCONFIG.playerPodTurretLaserColor));
+    this.lasers = new LaserCollection(new Color(SDCONFIG.stationaryTurretLaserColor));
+    this.energySystem = energySystem;
 }
 
 TurretCollection.prototype.shoot = function(turret, enemy){
-    if(!turret.cooldown.active) {
-        this.lasers.shoot(turret, enemy);
-        turret.cooldown.start();
-    }
+    turret.shoot(enemy);
 }
 
-TurretCollection.prototype.inTriggerZone = function(enemy){
+TurretCollection.prototype.inTriggerRange = function(enemy){
     for(var i = 0; i < this.turrets.length; i++) {
         var turret = this.turrets[i];
-        if (Vector.distance(turret.pos, enemy.pos) < turret.triggerRange) {
-            //console.log("in triggerzone - to star [" + enemy.distanceToStar + "]");
-            return turret;
-            break;
+        if(turret.active && !turret.isShooting) {
+            if (Vector.distance(turret.pos, enemy.pos) < turret.triggerRange) {
+                //console.log("in triggerzone - to star [" + enemy.distanceToStar + "]");
+                return turret;
+                break;
+            }
         }
     }
     return null;
 };
 
-TurretCollection.prototype.add = function(x, y){
-    var turret = new StationaryTurret(x, y);
+TurretCollection.prototype.add = function(x, y, size, color, turretsMaxEnergy, burnLength, triggerRange){
+    var turret = new Turret(x, y, size, color, turretsMaxEnergy, burnLength, triggerRange, this.lasers);
+    this.energySystem.registerConsumer(turret);
+    this.turrets.push(turret);
+};
+
+TurretCollection.prototype.addStationaryT1 = function(x, y){
+    var turret = new Turret(x, y, SDCONFIG.stationaryTurretSize, SDCONFIG.stationaryTurretColor, SDCONFIG.stationaryTurretMaxEnergy, SDCONFIG.stationaryTurretBurnLength, SDCONFIG.stationaryTurretTriggerRange, this.lasers);
+    this.energySystem.registerConsumer(turret);
     this.turrets.push(turret);
 };
 

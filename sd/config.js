@@ -9,10 +9,13 @@ function CONFIG(){
     // utseende
 
     this.starSize = 100;
-    this.starColor = [223, 244, 66];
+    this.starEnergy = 1000;
+    this.starEnergyGrowRate = 0.1; // per frame
+    this.starColor = [255, 170, 35];
+    this.starSecondaryColor = [244, 170, 66];
+    this.energyColor = [223, 244, 66];
 
-    this.hotzonesColor = [52, 155, 66];
-    this.hotzonesColorAlfa = 25;
+    this.triggerzonesColor = [52, 155, 66, 0.15];
 
     // beräknar avståndet 0,0 star.pos (mitten) som används till lite allt möjligt för enemy, bland annat spawn-avstånd
     // beräknar och sparar en gång för alla i config för att spara kraft
@@ -33,6 +36,8 @@ function CONFIG(){
 
     this.coolDownIntervalStep = 100;  // millisekunder - interval för rapportering om cooldown-status tillUI
 
+    this.LaserEnergyCost = 5;
+
     this.playerCursorSize = 8;
     this.playerCursorColor = [242, 124, 21];
     this.playerCursorLineAlfa = 0.5;
@@ -49,15 +54,20 @@ function CONFIG(){
     this.playerPodJetWidth = 1;
     this.playerPodJetLength = 4;
 
-    this.playerPodTurretSize = this.playerPodBodySize[1]*1.5;
-    this.playerPodTurretCooldown = 3000; // millisekunder för kortaste tid mellan varje laser
-    this.playerPodTurretColor = [88, 113, 153];
-    this.playerPodTurretLaserColor = [11, 218, 229];
-    this.playerPodTurretBurnLength = 20; // frames atm
-    this.playerPodTurretTriggerRange = this.starSize;
 
+    this.playerTurretSize = this.playerPodBodySize[1]*1.5;
+    this.playerTurretBurnLength = 25; // frames
+    this.playerTurretMaxEnergy = 100;
+    this.playerTurretColor = [88, 113, 153];
+    this.playerTurretLaserColor = [95, 66, 244];
+    this.playerTurretTriggerRange = this.starSize *0.8;
+
+    this.stationaryTurretBurnLength = 50; // frames
     this.stationaryTurretSize = 8;
-    this.stationaryTurretCooldown = 1000; // millisekunder för kortaste tid mellan varje laser
+    this.stationaryTurretColor = [66, 128, 244];
+    this.stationaryTurretLaserColor = [91, 173, 255];
+    this.stationaryTurretMaxEnergy = 50;
+    this.stationaryTurretTriggerRange = this.starSize;
 
     // keys
     this.keyPause = 80; // p

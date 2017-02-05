@@ -4,8 +4,8 @@ function LaserCollection(color){
     this.color = color;
 }
 
-LaserCollection.prototype.shoot = function(shootingObjectWithPos, enemy){ // shootingObjectWithPos & enemy måste ha en .pos som Vector
-    var laser = new Laser(shootingObjectWithPos, enemy, this.color.copy());
+LaserCollection.prototype.shoot = function(shootingObjectWithPos, enemy, burnLength){ // shootingObjectWithPos & enemy måste ha en .pos som Vector
+    var laser = new Laser(shootingObjectWithPos, enemy, burnLength, this.color.copy());
     laser.removeMeHandler = new Handler(this.removeLaser, this);
     this.lasers.push(laser);
 };

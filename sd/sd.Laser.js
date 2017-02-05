@@ -1,9 +1,11 @@
-function Laser(shootingObjectWithPos, enemy, color){ // shootingObjectWithPos & enemy måste ha en .pos som Vector
-    this.shooter = shootingObjectWithPos;
+function Laser(turret, enemy, burnLength, color){ // shootingObjectWithPos & enemy måste ha en .pos som Vector
+    this.turret = turret;
+    this.turret.isShooting = true;
+
     this.enemy = enemy;
     this.enemy.isTargeted = true;
 
-    this.burnLength = SDCONFIG.playerPodTurretBurnLength; // frames - burn anim - laser still på målet
+    this.burnLength = burnLength; // frames - burn anim - laser still på målet
     this.index = 0;
 
     this.color = color;
@@ -18,6 +20,7 @@ Laser.prototype.update = function(){
 
     if(this.index > this.burnLength){
         this.enemy.kill();
+        this.turret.isShooting = false;
         this.removeMeHandler.handlerCall(this);
     }
 
@@ -28,6 +31,6 @@ Laser.prototype.update = function(){
 
 Laser.prototype.draw = function() {
     stroke(this.color.getCSS());
-    line(this.shooter.pos.x, this.shooter.pos.y, this.enemy.pos.x, this.enemy.pos.y);
+    line(this.turret.pos.x, this.turret.pos.y, this.enemy.pos.x, this.enemy.pos.y);
 
 }

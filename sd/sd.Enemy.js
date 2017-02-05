@@ -2,22 +2,25 @@ function Enemy(x, y, speed, star) {
     this.star = star;
     this.pos = new Vector(x, y);
     this.size = 2;
+    this.speed = speed;
 
     var ang = this.pos.angleBetween(this.star.pos);
 
+    this.forces = []; // fylls utifrån med addForce och påverkar pos i update() . Resetas efter användning i update(), måste fyllas på inför varje update();
+
     this.damage = SDCONFIG.enenmyDamage;
 
-    this.vel = new Vector();
+    /*this.vel = new Vector();
     this.vel.length = speed;
     this.vel.angle = ang;
 
     this.vel = Vector.minus(this.star.pos, this.pos);
-    this.vel.length = speed;
+    this.vel.length = speed;*/
 
     this.status = "normal"; // normal: mot star, dying: die-anim, fool: mot proxy-bomb, impact: star-krock-anim, dead: väntar på att tas bort av swarm
 
     this.isTargeted = false; // om under beskjutning sätts av laser
-    this.inTriggerzone = false; // om i en lasers triggerzone, används för debug
+    this.inTriggerRange = false; // om i en lasers triggerzone, används för debug
 
     this.distanceToStar = 2000; // sätts/uppdaertas av update och används för sortering av enemy-listan i swarm (närmast star först)
 
@@ -33,14 +36,29 @@ function Enemy(x, y, speed, star) {
 
 }
 
+Enemy.prototype.addForce = function(force){ // polär force-vector
+    this.forces.push(force);
+}
+
 Enemy.prototype.kill = function(){
     this.removeMeHandler.handlerCall(this);
 };
 
 Enemy.prototype.update = function(){
     if(this.status == "normal" || this.status == "fool"){
-        this.pos.x += this.vel.x;
-        this.pos.y += this.vel.y;
+
+        var vel = Vector.minus(this.star.pos, this.pos);
+        vel.length = this.speed;
+
+        this.pos.x += vel.x;
+        this.pos.y += vel.y;
+
+        // Lägger på forces (från MagnetBombs)
+        for(var i = 0; i < this.forces.length; i++){
+            var f = this.forces[i];
+            this.pos.x += f.x;
+            this.pos.y += f.y;
+        }
 
         // kollar out-of-bounds SDCONFIG.swarmSpawnLength
         if(Vector.distance(this.pos, this.star.pos) > SDCONFIG.swarmOutOfBounds){
@@ -57,6 +75,8 @@ Enemy.prototype.update = function(){
 
         this.distanceToStar = Vector.distance(this.pos, this.star.pos) - this.star.size/2;
     }
+
+    this.forces = [];
 };
 
 Enemy.prototype.draw = function(drawOptions){
@@ -100,7 +120,7 @@ Enemy.prototype.draw = function(drawOptions){
                 if(this.isTargeted) {
                     fill(255, 0, 0);
                 }
-                if(this.inTriggerzone) {
+                if(this.inTriggerRange) {
                     fill(109, 255, 5);
                 }
             }

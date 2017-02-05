@@ -21,9 +21,9 @@ function draw() {
 
 }
 
-function mouseClicked() {
+function mouseReleased() {
 
-    game.mouseClicked();
+    game.mouseReleased();
 
 }
 
