@@ -57,12 +57,10 @@ Energy.prototype.update = function(){
 
 };
 
-Energy.prototype.canIUse = function(value){
-    if(value <= this.value){
-        this.empty = false;
+Energy.prototype.canIUse = function(energyAmount){
+    if(this.value > energyAmount){
         return true;
     } else {
-        this.empty = true;
         return false;
     }
 }

@@ -17,6 +17,8 @@ function Turret(x, y, size, colorArr, maxEnergy, burnLength, triggerRange, laser
 
     this.active = false;
     this.isShooting = false; // uppdateras true/false av Laser
+
+    this.mouse = new MouseEvents(this);
 }
 
 Turret.prototype.shoot = function(enemy){
@@ -42,11 +44,18 @@ Turret.prototype.update = function(){
     this.energyUI.pos = this.pos.clone();
 
     this.uiTriggerzone.pos = this.pos;
+    if(this.active){
+        this.uiTriggerzone.active = true;
+    } else {
+        this.uiTriggerzone.active = false;
+    }
 }
 
 Turret.prototype.draw = function(drawOptions){
 
-    this.uiTriggerzone.draw(drawOptions);
+    if(this.mouse.hover()) {
+        this.uiTriggerzone.draw(drawOptions);
+    }
 
     noStroke();
     fill(this.color.getCSS());

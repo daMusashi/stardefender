@@ -16,6 +16,7 @@ function CONFIG(){
     this.energyColor = [223, 244, 66];
 
     this.triggerzonesColor = [52, 155, 66, 0.1];
+    this.triggerzonesInactiveColor = [110, 110, 110, 0.1];
 
     // beräknar avståndet 0,0 star.pos (mitten) som används till lite allt möjligt för enemy, bland annat spawn-avstånd
     // beräknar och sparar en gång för alla i config för att spara kraft

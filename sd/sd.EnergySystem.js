@@ -16,7 +16,9 @@ EnergySystem.prototype.registerConsumer = function(posObjectWithEnergy){ // obje
     this.consumers.push(posObjectWithEnergy);
 }
 
-
+EnergySystem.prototype.canIUse = function(energyAmount){
+    return this.star.energy.canIUse(energyAmount);
+}
 
 EnergySystem.prototype.update = function(){
     this.total = this.star.energy.value;
@@ -29,7 +31,9 @@ EnergySystem.prototype.update = function(){
             console.log("energy empty, fill Up");
             //consumer.energy.fillMax();
             //this.star.energy.value -= consumer.energy.max;
-            this.distribution.makeDelivery(consumer);
+            if(this.canIUse(consumer.energy.getMissing())) {
+                this.distribution.makeDelivery(consumer);
+            }
         }
     }
 

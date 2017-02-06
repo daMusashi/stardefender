@@ -10,12 +10,13 @@ function Magnet(x, y, size, colorArr, maxEnergy, burnRate){
     this.energyUI = new UIEnergyPie(this.pos.x, this.pos.y, this.size-1, this.energy.max, SDCONFIG.energyColor);
 
     this.uiTriggerzone = new UITriggerzone(this.pos.x, this.pos.y, this.forceRange);
+
+    this.mouse = new MouseEvents(this);
 }
 
 Magnet.prototype.getForce = function(pos){
     var f = new Vector(); // polar force-vector
-    f.angle = Vector.angleBetween(pos, this.pos);
-    f.length = this.force;
+    f.setPolar(Vector.angleBetween(pos, this.pos), this.force);
 
     return f;
 }
@@ -37,7 +38,7 @@ Magnet.prototype.update = function(){
 
 Magnet.prototype.draw = function(drawOptions){
 
-    if(this.active) {
+    if(this.mouse.hover()) {
         this.uiTriggerzone.draw(drawOptions);
     }
 
