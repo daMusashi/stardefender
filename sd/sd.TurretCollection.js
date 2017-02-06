@@ -22,16 +22,14 @@ TurretCollection.prototype.inTriggerRange = function(enemy){
     return null;
 };
 
-TurretCollection.prototype.add = function(x, y, size, color, turretsMaxEnergy, burnLength, triggerRange){
-    var turret = new Turret(x, y, size, color, turretsMaxEnergy, burnLength, triggerRange, this.lasers);
+TurretCollection.prototype.add = function(x, y, size, colorArr, turretsMaxEnergy, burnLength, triggerRange){
+    var turret = new Turret(x, y, size, colorArr, turretsMaxEnergy, burnLength, triggerRange, this.lasers);
     this.energySystem.registerConsumer(turret);
     this.turrets.push(turret);
 };
 
 TurretCollection.prototype.addStationaryT1 = function(x, y){
-    var turret = new Turret(x, y, SDCONFIG.stationaryTurretSize, SDCONFIG.stationaryTurretColor, SDCONFIG.stationaryTurretMaxEnergy, SDCONFIG.stationaryTurretBurnLength, SDCONFIG.stationaryTurretTriggerRange, this.lasers);
-    this.energySystem.registerConsumer(turret);
-    this.turrets.push(turret);
+    this.add(x, y, SDCONFIG.stationaryTurretSize, SDCONFIG.stationaryTurretColor, SDCONFIG.stationaryTurretMaxEnergy, SDCONFIG.stationaryTurretBurnLength, SDCONFIG.stationaryTurretTriggerRange, this.lasers);
 };
 
 

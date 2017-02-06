@@ -15,7 +15,7 @@ function CONFIG(){
     this.starSecondaryColor = [244, 170, 66];
     this.energyColor = [223, 244, 66];
 
-    this.triggerzonesColor = [52, 155, 66, 0.15];
+    this.triggerzonesColor = [52, 155, 66, 0.1];
 
     // beräknar avståndet 0,0 star.pos (mitten) som används till lite allt möjligt för enemy, bland annat spawn-avstånd
     // beräknar och sparar en gång för alla i config för att spara kraft
@@ -71,6 +71,13 @@ function CONFIG(){
     this.stationaryTurretLaserColor = [91, 173, 255];
     this.stationaryTurretMaxEnergy = 10; // def 50
     this.stationaryTurretTriggerRange = this.starSize;
+
+    this.magnetColor = this.playerTurretColor;
+    this.magnetSize = 12;
+    this.magnetForce = 0.1;
+    this.magnetMaxEnergy = 50;
+    this.magnetBurnRate = 0.1; // energy som går per frame
+    this.magnetForceRange = 100;
 
     // keys
     this.keyPause = 80; // p

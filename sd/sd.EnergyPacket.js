@@ -38,7 +38,6 @@ EnergyPacket.prototype.update = function(){
 }
 
 EnergyPacket.prototype.draw = function(drawOptions){
-    console.log("drawing paket");
     noStroke();
     fill(this.color.getCSS());
     ellipse(this.pos.x, this.pos.y, 5, 5);

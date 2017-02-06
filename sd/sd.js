@@ -79,7 +79,7 @@ SD.prototype.mouseReleased = function(){
         this.turrets.addStationaryT1(mouseX, mouseY);
     }
     if (mouseButton == RIGHT) {
-        this.magnets.add(mouseX, mouseY);
+        this.magnets.addMagnetT1(mouseX, mouseY);
     }
 }
 
@@ -146,8 +146,11 @@ SD.prototype.update = function(){
         this.star.update();
         this.energy.update();
         this.swarm.update();
-        this.player.update(this.swarm);
+
         this.turrets.update();
+        this.magnets.update();
+
+        this.player.update(this.swarm);
     }
 
 };

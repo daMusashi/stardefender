@@ -1,9 +1,13 @@
-function Magnet(x, y){
+function Magnet(x, y, size, colorArr, maxEnergy, burnRate){
     this.pos = new Vector(x, y);
-    this.force = 0.1;
-    this.forceRange = 100;
+    this.force = SDCONFIG.magnetForce;
+    this.forceRange = SDCONFIG.magnetForceRange;
 
-    this.color = new Color(SDCONFIG.triggerzonesColor);
+    this.size = size;
+    this.color = new Color(colorArr);
+
+    this.energy = new Energy(maxEnergy, -burnRate);
+    this.energyUI = new UIEnergyPie(this.pos.x, this.pos.y, this.size-1, this.energy.max, SDCONFIG.energyColor);
 
     this.uiTriggerzone = new UITriggerzone(this.pos.x, this.pos.y, this.forceRange);
 }
@@ -17,14 +21,29 @@ Magnet.prototype.getForce = function(pos){
 }
 
 Magnet.prototype.update = function(){
+    this.energy.update();
+    if(this.energy.empty){
+        this.active = false;
+    } else {
+        this.active = true;
+    }
+
+    this.energyUI.value = this.energy.value;
+    this.energyUI.pos = this.pos.clone();
+
     this.uiTriggerzone.pos = this.pos;
+
 }
 
 Magnet.prototype.draw = function(drawOptions){
 
-    this.uiTriggerzone.draw(drawOptions);
+    if(this.active) {
+        this.uiTriggerzone.draw(drawOptions);
+    }
 
     noStroke();
-    fill(250, 0, 0);
-    ellipse(this.pos.x, this.pos.y, 5, 5);
+    fill(this.color.getCSS());
+    ellipse(this.pos.x, this.pos.y, this.size, this.size);
+
+    this.energyUI.draw(drawOptions);
 }
