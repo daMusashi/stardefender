@@ -41,5 +41,6 @@ MagnetCollection.prototype.update = function(){
 MagnetCollection.prototype.draw = function(drawOptions){
     for(var i = 0; i < this.magnets.length; i++) {
         this.magnets[i].draw(drawOptions);
+
     }
 }
