@@ -36,6 +36,9 @@ function CONFIG(){
 
     this.coolDownIntervalStep = 100;  // millisekunder - interval för rapportering om cooldown-status tillUI
 
+    this.energyPacketSpeed = 0.5;
+    this.energyPacketColor = this.energyColor;
+
     this.LaserEnergyCost = 5;
 
     this.playerCursorSize = 8;
@@ -66,7 +69,7 @@ function CONFIG(){
     this.stationaryTurretSize = 8;
     this.stationaryTurretColor = [66, 128, 244];
     this.stationaryTurretLaserColor = [91, 173, 255];
-    this.stationaryTurretMaxEnergy = 50;
+    this.stationaryTurretMaxEnergy = 10; // def 50
     this.stationaryTurretTriggerRange = this.starSize;
 
     // keys

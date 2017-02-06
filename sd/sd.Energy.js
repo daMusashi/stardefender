@@ -4,6 +4,7 @@ function Energy(maxEnergy, growRate){
     this.grow = growRate || 0;
 
     this.empty = true;
+    this.waitingForPacket = false; // ställs av EnergyPaket
 
     // EnergySystem kontrollera värden själv
     /*this.emptyCallbackHandler = null; // när energy når <= 0 - sätt utifrån vid behov - använd Handler-objektet för att hantera callbackens scope
@@ -12,6 +13,17 @@ function Energy(maxEnergy, growRate){
 
 }
 
+// hur mycket energi som saknas till max
+Energy.prototype.getMissing = function(){
+    return this.max - this.value;
+}
+
+// fyll fullt
+Energy.prototype.add = function(value){
+    this.value += value;
+}
+
+// fyll fullt
 Energy.prototype.fillMax = function(){
     this.value = this.max;
 }

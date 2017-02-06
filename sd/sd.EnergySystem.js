@@ -1,5 +1,6 @@
 function EnergySystem(star){
     this.star = star;
+    this.distribution = new EnergyPacketCollection(this.star);
 
     //this.turrets = [];
     //this.magnets = [];
@@ -24,13 +25,20 @@ EnergySystem.prototype.update = function(){
         var consumer = this.consumers[i];
         this.total += consumer.energy.value;
 
-        if(consumer.energy.value <= 0){
+        if(consumer.energy.value <= 0 && !consumer.energy.waitingForPacket){
             console.log("energy empty, fill Up");
-            consumer.energy.fillMax();
-            this.star.energy.value -= consumer.energy.max;
+            //consumer.energy.fillMax();
+            //this.star.energy.value -= consumer.energy.max;
+            this.distribution.makeDelivery(consumer);
         }
     }
 
+    this.distribution.update();
+
     //console.log("E star:"+ this.star.energy.value);
     //console.log("E system:"+ this.totalValue);
+}
+
+EnergySystem.prototype.draw = function(drawOptions){
+    this.distribution.draw(drawOptions);
 }

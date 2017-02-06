@@ -180,6 +180,7 @@ SD.prototype.drawRunning = function(){
     //this.db("drawRunning");
     background(0);
     this.star.draw(SDCONFIG.drawOptions);
+    this.energy.draw(SDCONFIG.drawOptions);
     this.swarm.draw(SDCONFIG.drawOptions);
     this.turrets.draw(SDCONFIG.drawOptions);
     this.magnets.draw(SDCONFIG.drawOptions);
