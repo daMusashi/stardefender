@@ -2,6 +2,18 @@ function CONFIG(){
     this.canvasHeight = 600;
     this.canvasWidth = 600;
 
+    // UI
+    this.uiColorMain = [18, 58, 107];
+    this.uiTopbarHeight = 30;
+
+    this.uiCursorSize = 10;
+    this.uiCursorColor = [255, 255, 255];
+
+    this.uiPlayerCursorSize = 8;
+    this.uiPlayerCursorColor = [242, 124, 21];
+    this.uiPlayerCursorLineAlfa = 0.5;
+    this.uiPlayerCursorLineDotSpacing = 5; // inklusive punkten (space = x -1)
+
     // game values / balance
     this.starHealth = 1000;
     this.enenmyDamage = 8;
@@ -42,11 +54,6 @@ function CONFIG(){
 
     this.LaserEnergyCost = 5;
 
-    this.playerCursorSize = 8;
-    this.playerCursorColor = [242, 124, 21];
-    this.playerCursorLineAlfa = 0.5;
-    this.playerCursorLineDotSpacing = 5; // inklusive punkten (space = x -1)
-
     this.playerHaloColor = [66, 134, 244, 0.3];
     this.playerHaloSize = this.starSize * 2.5;
     this.playerHaloStrokeSize = 1;
@@ -61,7 +68,7 @@ function CONFIG(){
 
     this.playerTurretSize = this.playerPodBodySize[1]*1.5;
     this.playerTurretBurnLength = 25; // frames
-    this.playerTurretMaxEnergy = 100;
+    this.playerTurretMaxEnergy = 8*this.LaserEnergyCost;
     this.playerTurretColor = [88, 113, 153];
     this.playerTurretLaserColor = [95, 66, 244];
     this.playerTurretTriggerRange = this.starSize *0.8;
@@ -70,7 +77,7 @@ function CONFIG(){
     this.stationaryTurretSize = 8;
     this.stationaryTurretColor = [66, 128, 244];
     this.stationaryTurretLaserColor = [91, 173, 255];
-    this.stationaryTurretMaxEnergy = 10; // def 50
+    this.stationaryTurretMaxEnergy = 5*this.LaserEnergyCost; // def 50
     this.stationaryTurretTriggerRange = this.starSize;
 
     this.magnetColor = this.playerTurretColor;

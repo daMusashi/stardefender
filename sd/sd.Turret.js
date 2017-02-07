@@ -30,13 +30,14 @@ Turret.prototype.shoot = function(enemy){
 
 Turret.prototype.update = function(){
     this.energy.update();
-    if(this.energy.empty){
+
+    this.active = true;
+    this.energy.needPacket = false;
+
+    if(!this.energy.canIUse(SDCONFIG.LaserEnergyCost)){
         this.active = false;
-    } else {
-        if(this.energy.canIUse(SDCONFIG.LaserEnergyCost)) {
-            this.active = true;
-        } else {
-            this.active = false;
+        if(!this.energy.waitingForPacket){
+            this.energy.needPacket = true;
         }
     }
 

@@ -50,29 +50,24 @@ SD.prototype.setup = function(){
     this.energy = new EnergySystem(this.star);
 
     this.player = new Player(this.star, this.energy);
-    this.swarm = {};
-
     this.turrets = new TurretCollection(this.energy);
     this.magnets = new MagnetCollection(this.energy);
 
-    this.nextSwarm();
+    this.swarms = new SwarmControl(this.star, this.player, this.turrets, this.magnets);
+
+    this.uiTopbar = new UITopbar(this.player);
+
+    this.swarms.nextSwarm();
 
 };
 
-SD.prototype.EnemyImpactHandler = function(damage){
-    this.star.takeDamage(damage);
-}
+
 
 SD.prototype.starDiedHandler = function(){
     console.log("DIED!")
     this.mode = 0;
 }
 
-SD.prototype.nextSwarm = function(){
-    this.swarm = new Swarm(this.star, this.player, this.turrets, this.magnets, 0, 90, 50, SDCONFIG.enemiesStartVel);
-    this.swarm.allDeadHandlers.add(this.nextSwarm, this);
-    this.swarm.impactHandlers.add(this.EnemyImpactHandler, this);
-};
 
 SD.prototype.mouseReleased = function(){
     if (mouseButton == LEFT) {
@@ -145,20 +140,21 @@ SD.prototype.update = function(){
     if(this.mode == 2) {
         this.star.update();
         this.energy.update();
-        this.swarm.update();
+        this.swarms.update();
 
         this.turrets.update();
         this.magnets.update();
 
-        this.player.update(this.swarm);
+        this.uiTopbar.update();
+        this.player.update(this.swarms.swarm);
+
     }
 
 };
 
 SD.prototype.draw = function(){
-    //this.db("Draw - mode "+ this.mode);
-
     noCursor();
+
     switch(this.mode) {
         case 0: // pause
 
@@ -184,10 +180,12 @@ SD.prototype.drawRunning = function(){
     background(0);
     this.star.draw(SDCONFIG.drawOptions);
     this.energy.draw(SDCONFIG.drawOptions);
-    this.swarm.draw(SDCONFIG.drawOptions);
+    this.swarms.draw(SDCONFIG.drawOptions);
     this.turrets.draw(SDCONFIG.drawOptions);
     this.magnets.draw(SDCONFIG.drawOptions);
     this.player.draw(SDCONFIG.drawOptions);
+
+    this.uiTopbar.draw();
 };
 
 var sdinfo = function(msg){

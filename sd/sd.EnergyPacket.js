@@ -1,6 +1,7 @@
 function EnergyPacket(star, targetPosAndEnergyObj, color, onDeliveredHandler){
     this.consumer = targetPosAndEnergyObj;
     this.consumer.energy.waitingForPacket = true;
+    this.consumer.energy.needPacket = false;
 
     this.star = star;
 

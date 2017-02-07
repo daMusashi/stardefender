@@ -15,6 +15,8 @@ function Player(star, energySystem){
     this.energySystem.registerConsumer(this.turret);
 
     this.haloColor = new Color(SDCONFIG.playerHaloColor);
+
+    this.holdPod = false; // om poden ska vara stilla eller ej, styrs utifrån av t.ex ui
 }
 
 Player.prototype.shoot = function(enemy){
@@ -24,8 +26,9 @@ Player.prototype.shoot = function(enemy){
 
 Player.prototype.update = function(){
 
-    this.podPosition.update();
-
+    if(!this.holdPod) {
+        this.podPosition.update();
+    }
     this.cursor.update(this.podPosition);
     this.pod.update(this.podPosition);
     this.turret.pos = this.podPosition.podPos;
@@ -48,5 +51,5 @@ Player.prototype.draw = function(drawOptions){
 
     this.playerLasers.draw(drawOptions);
 
-    this.cursor.draw(drawOptions)
+    this.cursor.draw(drawOptions, this.holdPod)
 };

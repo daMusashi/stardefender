@@ -31,7 +31,7 @@ function Enemy(x, y, speed, star) {
     // handlers
     this.dieHandlers = new HandlerStack(); // när enemies dör (blir träffade av spelare)
     this.impactHandler = new Handler(); // när enemies träffas star och ger damage (+ ev andra händelser då enemy krockar med damage)
-    this.removeMeHandler = new Handler(); // handler som tar bort enemy från draw-list (Swarm har den)
+    this.removeMeHandler = new Handler(); // handler som tar bort enemy från draw-list (SwarmControl har den)
 
     this.debug = {};
     this.debug.forces = {};

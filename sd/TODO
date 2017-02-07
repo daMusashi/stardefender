@@ -1,16 +1,9 @@
 PÅGÅENDE
-* lägg/andä till energi istället för cooldown
-* tid/hastigheter frames-baserad (coldown nu tidsbaserad)
+* swarm med multipla vinklar
+
+2017-02-07
+* gör en radar baserat på level-swarm-spawn-vinklar så att man kan se vad som kommer och från viket håll för leveln
 
 2017-02-03
 * Se till att pause blir global för t.ex även Cooldown (har lagt in en pause()), nu är det bara huvud-draw() som påverkas.
   Knyta allt tidsbaserat (speed, cooldowns etc.) till framerate??? (och Cooldown räknar via en update() ) Då funkar nuvrande lösning med styra från huvud-draw()
-* Punktad linje till markör
-
-* GÖr om cooldown till:
-** Energi - cooldown-pie visar eneri
-** Turrets laser dränerar turret på energi som måste laddas om
-** Men coldown-pis visar istället en energi som drämeras från star för att ladda turrets
-** Star har en cooldown-pis undersig som sticker ut som visar laddningen
-** Laddningen fylls på lite hela tiden
-** varje turret har en "laddningslinje", när dess energi är slut åker en enrgi-bit ut från sar längs linjen till turret

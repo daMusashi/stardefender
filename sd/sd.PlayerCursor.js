@@ -3,12 +3,12 @@ function PlayerCursor(){
     this.podPos = new Vector();
     this.podCursorVector = new Vector();
 
-    this.size = SDCONFIG.playerCursorSize;
+    this.size = SDCONFIG.uiPlayerCursorSize;
 
-    this.cursorColor = new Color(SDCONFIG.playerCursorColor);
+    this.cursorColor = new Color(SDCONFIG.uiPlayerCursorColor);
     this.cursorLineColor = this.cursorColor.copy();
-    this.cursorLineColor.a = SDCONFIG.playerCursorLineAlfa;
-    this.cursorLineDotSpacing = SDCONFIG.playerCursorLineDotSpacing;
+    this.cursorLineColor.a = SDCONFIG.uiPlayerCursorLineAlfa;
+    this.cursorLineDotSpacing = SDCONFIG.uiPlayerCursorLineDotSpacing;
 }
 
 PlayerCursor.prototype.update = function(podPosition){
@@ -17,18 +17,20 @@ PlayerCursor.prototype.update = function(podPosition){
     this.podCursorVector = Vector.minus(this.pos, this.podPos);
 }
 
-PlayerCursor.prototype.draw = function(drawOptions){
+PlayerCursor.prototype.draw = function(drawOptions, hold){
     noFill();
 
     // guid-linje
-    strokeWeight(1);
-    stroke(this.cursorLineColor.getCSS());
-    var dotX = this.podPos.x;
-    var dotY = this.podPos.y;
-    for(var i = 0; i < this.podCursorVector.length/this.cursorLineDotSpacing; i++){
-        dotX += this.cursorLineDotSpacing * Math.cos(this.podCursorVector.angle);
-        dotY += this.cursorLineDotSpacing * Math.sin(this.podCursorVector.angle);
-        point(dotX, dotY);
+    if(!hold){
+        strokeWeight(1);
+        stroke(this.cursorLineColor.getCSS());
+        var dotX = this.podPos.x;
+        var dotY = this.podPos.y;
+        for(var i = 0; i < this.podCursorVector.length/this.cursorLineDotSpacing; i++){
+            dotX += this.cursorLineDotSpacing * Math.cos(this.podCursorVector.angle);
+            dotY += this.cursorLineDotSpacing * Math.sin(this.podCursorVector.angle);
+            point(dotX, dotY);
+        }
     }
 
     // cursor

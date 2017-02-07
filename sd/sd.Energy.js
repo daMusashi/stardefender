@@ -4,6 +4,7 @@ function Energy(maxEnergy, growRate){
     this.grow = growRate || 0;
 
     this.empty = true;
+    this.needPacket = true; // sätts av host-objekt och EnergyPacket - om star behöver sända energy till den här consumern
     this.waitingForPacket = false; // ställs av EnergyPaket
 
     // EnergySystem kontrollera värden själv

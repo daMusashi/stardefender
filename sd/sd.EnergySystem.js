@@ -12,6 +12,7 @@ function EnergySystem(star){
 EnergySystem.prototype.registerConsumer = function(posObjectWithEnergy){ // objekt med .pos (Vector) och .energy (Energy)
     console.log("E: Registered cunsumer!!!");
     posObjectWithEnergy.energy.fillMax(); // value = 0 från början, får max här att "visa" online i systemet
+    posObjectWithEnergy.energy.needPacket = false;
     this.star.energy.value -= posObjectWithEnergy.energy.max;
     this.consumers.push(posObjectWithEnergy);
 }
@@ -27,12 +28,14 @@ EnergySystem.prototype.update = function(){
         var consumer = this.consumers[i];
         this.total += consumer.energy.value;
 
-        if(consumer.energy.value <= 0 && !consumer.energy.waitingForPacket){
-            console.log("energy empty, fill Up");
+        if(consumer.energy.needPacket && !consumer.energy.waitingForPacket){
+            //console.log("ES: consumer:energy empty, fill me Up");
             //consumer.energy.fillMax();
             //this.star.energy.value -= consumer.energy.max;
             if(this.canIUse(consumer.energy.getMissing())) {
                 this.distribution.makeDelivery(consumer);
+            } else {
+                //console.log("ES: no, not enough in star");
             }
         }
     }
